@@ -1,0 +1,7 @@
+.idea
+.ijwb
+bazel-*
+.bazelbsp
+
+# Project exclude paths
+/.bsp/

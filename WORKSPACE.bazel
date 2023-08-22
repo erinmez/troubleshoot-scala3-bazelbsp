@@ -1,0 +1,133 @@
+# WORKSPACE
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+    ],
+)
+
+rules_scala_version = "12d60d203591d92572c812f345b45babff688230"
+
+http_archive(
+    name = "io_bazel_rules_scala",
+    sha256 = "5144514f81e63a3337e56d86b2924a22a1d5d9f273e482c2f2fb09639f6388fa",
+    strip_prefix = "rules_scala-%s" % rules_scala_version,
+    type = "zip",
+    url = "https://github.com/bazelbuild/rules_scala/archive/%s.zip" % rules_scala_version,
+)
+
+load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
+
+scala_config(scala_version = "3.3.0")
+
+load("@io_bazel_rules_scala//scala:scala.bzl", "rules_scala_setup", "rules_scala_toolchain_deps_repositories")
+
+# loads other rules Rules Scala depends on
+rules_scala_setup()
+
+rules_scala_toolchain_deps_repositories(fetch_sources = True)
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
+load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
+
+scala_register_toolchains()
+
+# see ./BUILD.bazel for definition
+register_toolchains("//:junit_toolchain")
+
+# Needed for MAVEN repos
+RULES_JVM_EXTERNAL_TAG = "5.2"
+
+RULES_JVM_EXTERNAL_SHA = "f86fd42a809e1871ca0aabe89db0d440451219c3ce46c58da240c7dcdc00125f"
+
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = RULES_JVM_EXTERNAL_SHA,
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (RULES_JVM_EXTERNAL_TAG, RULES_JVM_EXTERNAL_TAG),
+)
+
+load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
+rules_jvm_external_deps()
+
+load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+
+rules_jvm_external_setup()
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+# Maven dependencies
+ZIO_VERSION = "2.0.15"
+
+ZIO_IZUMI_VERSION = "2.3.8"
+
+ZIO_PRELUDE_VERSION = "1.0.0-RC19"
+
+ZIO_SCHEMA_VERSION = "0.4.12"
+
+ZIO_HTTP_VERSION = "3.0.0-RC2"
+
+ZIO_JSON_VERSION = "0.5.0"
+
+ZIO_CONSTRAINTLESS_VERSION = "0.3.2"
+
+ZIO_PROCESS_VERSION = "0.7.2"
+
+NETTY_VERSION = "4.1.93.Final"
+
+maven_install(
+    artifacts = [
+        "dev.zio:zio_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-internal-macros_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-streams_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-test_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-test-magnolia_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-test-junit_3:%s" % ZIO_VERSION,
+        "dev.zio:zio-stacktracer_3:%s" % ZIO_VERSION,
+        "dev.zio:izumi-reflect_3:%s" % ZIO_IZUMI_VERSION,
+        "dev.zio:izumi-reflect-thirdparty-boopickle-shaded_3:%s" % ZIO_IZUMI_VERSION,
+        "dev.zio:zio-prelude_3:%s" % ZIO_PRELUDE_VERSION,
+        "dev.zio:zio-prelude-macros_3:%s" % ZIO_PRELUDE_VERSION,
+        "dev.zio:zio-schema_3:%s" % ZIO_SCHEMA_VERSION,
+        "dev.zio:zio-schema-macros_3:%s" % ZIO_SCHEMA_VERSION,
+        "dev.zio:zio-schema-derivation_3:%s" % ZIO_SCHEMA_VERSION,
+        "dev.zio:zio-schema-json_3:%s" % ZIO_SCHEMA_VERSION,
+        "dev.zio:zio-schema-protobuf_3:%s" % ZIO_SCHEMA_VERSION,
+        "dev.zio:zio-constraintless_3:%s" % ZIO_CONSTRAINTLESS_VERSION,
+        "dev.zio:zio-http_3:%s" % ZIO_HTTP_VERSION,
+        "dev.zio:zio-json_3:%s" % ZIO_JSON_VERSION,
+        "dev.zio:zio-process_3:%s" % ZIO_PROCESS_VERSION,
+        "io.netty:netty-buffer:%s" % NETTY_VERSION,
+        "io.netty:netty-codec:%s" % NETTY_VERSION,
+        "io.netty:netty-codec-http:%s" % NETTY_VERSION,
+        "io.netty:netty-codec-socks:%s" % NETTY_VERSION,
+        "io.netty:netty-common:%s" % NETTY_VERSION,
+        "io.netty:netty-handler:%s" % NETTY_VERSION,
+        "io.netty:netty-handler-proxy:%s" % NETTY_VERSION,
+        "io.netty:netty-resolver:%s" % NETTY_VERSION,
+        "io.netty:netty-transport:%s" % NETTY_VERSION,
+        "io.netty:netty-transport-classes-epoll:%s" % NETTY_VERSION,
+        "io.netty:netty-transport-classes-kqueue:%s" % NETTY_VERSION,
+        "io.netty:netty-transport-native-unix-common:%s" % NETTY_VERSION,
+    ],
+    fetch_sources = True,
+    repositories = [
+        "https://repo1.maven.org/maven2",
+        #        "https://maven.google.com",
+    ],
+)
+
+# see ./BUILD.bazel for definition
+register_toolchains(
+    "//:diagnostics_reporter_toolchain"
+)

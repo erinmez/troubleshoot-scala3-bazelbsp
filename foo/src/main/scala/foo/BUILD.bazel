@@ -1,0 +1,13 @@
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary", "scala_library")
+
+scala_binary(
+    name = "app",
+    srcs = [
+        "MainApp.scala",
+    ],
+    main_class = "foo.MainApp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:zio",
+    ],
+)

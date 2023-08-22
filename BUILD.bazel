@@ -1,0 +1,75 @@
+load("@io_bazel_rules_scala//scala:scala_import.bzl", "scala_import")
+load("@io_bazel_rules_scala//scala:scala.bzl", "setup_scala_testing_toolchain")
+
+
+scala_import(
+    name = "zio",
+    jars = [
+        "@maven//:dev_zio_zio_3",
+        "@maven//:dev_zio_zio_internal_macros_3",
+        "@maven//:dev_zio_zio_stacktracer_3",
+        "@maven//:dev_zio_izumi_reflect_3",
+        "@maven//:dev_zio_izumi_reflect_thirdparty_boopickle_shaded_3",
+        "@maven//:dev_zio_zio_streams_3",
+        "@maven//:dev_zio_zio_prelude_3",
+        "@maven//:dev_zio_zio_prelude_macros_3",
+        "@maven//:dev_zio_zio_schema_3",
+        "@maven//:dev_zio_zio_schema_macros_3",
+        "@maven//:dev_zio_zio_schema_json_3",
+        "@maven//:dev_zio_zio_schema_protobuf_3",
+        "@maven//:dev_zio_zio_schema_derivation_3",
+        "@maven//:dev_zio_zio_constraintless_3",
+        "@maven//:dev_zio_zio_http_3",
+        "@maven//:dev_zio_zio_json_3",
+        "@maven//:dev_zio_zio_process_3",
+        "@maven//:io_netty_netty_buffer",
+        "@maven//:io_netty_netty_codec",
+        "@maven//:io_netty_netty_codec_http",
+        "@maven//:io_netty_netty_codec_socks",
+        "@maven//:io_netty_netty_common",
+        "@maven//:io_netty_netty_handler",
+        "@maven//:io_netty_netty_handler_proxy",
+        "@maven//:io_netty_netty_resolver",
+        "@maven//:io_netty_netty_transport",
+        "@maven//:io_netty_netty_transport_classes_epoll",
+        "@maven//:io_netty_netty_transport_classes_kqueue",
+        "@maven//:io_netty_netty_transport_native_unix_common",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+scala_import(
+    name = "ziotest",
+    jars = [
+        "//:zio",
+        "@maven//:dev_zio_zio_test_3",
+        "@maven//:dev_zio_zio_test_magnolia_3",
+        "@maven//:dev_zio_zio_test_junit_3",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+setup_scala_testing_toolchain(
+    name = "junit_toolchain",
+    junit_classpath = [
+        "//:ziotest",
+        "@maven//:junit_junit",
+        "@maven//:org_hamcrest_hamcrest_core",
+    ],
+)
+
+load("@io_bazel_rules_scala//scala:scala_toolchain.bzl", "scala_toolchain")
+
+scala_toolchain(
+    name = "diagnostics_reporter_toolchain_impl",
+    enable_diagnostics_report = True,
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "diagnostics_reporter_toolchain",
+    toolchain = "diagnostics_reporter_toolchain_impl",
+    toolchain_type = "@io_bazel_rules_scala//scala:toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
