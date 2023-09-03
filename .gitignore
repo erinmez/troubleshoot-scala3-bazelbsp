@@ -1,7 +1,9 @@
 .idea
 .ijwb
-bazel-*
 .bazelbsp
+.metals
+.vscode
+bazel-*
 
 # Project exclude paths
 /.bsp/
