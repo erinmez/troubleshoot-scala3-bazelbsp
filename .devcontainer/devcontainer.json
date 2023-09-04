@@ -1,0 +1,16 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"customizations": {
+		"vscode": {
+		  "extensions": [
+			"scalameta.metals", 
+		  	"mhutchie.git-graph"]
+		}
+	},
+	"features": {
+		"ghcr.io/balazs23/devcontainers-features/bazel:1": {
+			"bazelisk": "latest"
+		}
+	},
+	"postCreateCommand": "\"curl -fL 'https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz' | gzip -d > /tmp/cs && chmod +x /tmp/cs && /tmp/cs setup --yes && /home/codespace/.local/share/coursier/bin/cs launch org.jetbrains.bsp:bazel-bsp:3.0.0-20230902-1716735-NIGHTLY -M org.jetbrains.bsp.bazel.install.Install && rm -rf /tmp/cs\""
+}
