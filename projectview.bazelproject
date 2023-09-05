@@ -6,7 +6,5 @@ derive_targets_from_directories: false
 targets:
   //foo/src/main/scala/foo:app
 
-workspace_type: scala
-
 additional_languages:
   scala
