@@ -1,4 +1,4 @@
-load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary", "scala_library")
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary")
 
 scala_binary(
     name = "app",
@@ -6,6 +6,9 @@ scala_binary(
         "MainApp.scala",
     ],
     main_class = "foo.MainApp",
+    scalacopts = [
+        "-Ysemanticdb",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:zio",
