@@ -1,4 +1,17 @@
+Repo to reproduce a bazel-bsp issue where it does not add the source dependencies to IntelliJ's project model when `derive_targets_from_directories` is set to true in `projectview.bazelproject` (set to false works) (https://youtrack.jetbrains.com/issue/BAZEL-596):
+
+- bazel version is 6.3.2
+- Scala is 3.3.0
+- contains simple hello world done with ZIO framework to have a Bazel+Scala3 project that also downloads maven dependencies.
+- runnable with `bazel run //foo/src/main/scala/foo:app`
+
+<br>
+Previous Issue which is solved:
+<details>
+  <summary>Scala 3 not detected in Bazel BSP (solved in the nightly build or > 3.0.0)</summary>
+<br>
 Repo to reproduce a bazel-bsp issue where it is not able to locate the SDK with newer Scala 3 versions (https://youtrack.jetbrains.com/issue/BAZEL-404):
+
 - bazel version is 6.3.2
 - Scala is 3.3.0
 - contains simple hello world done with ZIO framework to have a Bazel+Scala3 project that also downloads maven dependencies.
@@ -18,3 +31,4 @@ Steps to reproduce:
    
    `org.eclipse.lsp4j.jsonrpc.ResponseErrorException: java.lang.RuntimeException: Failed to resolve Scala SDK for project`
 
+</details>
